@@ -11,6 +11,7 @@
 6. [порядок перебора](#6-порядок-перебора)
 7. [лонги](#7-define-int-int64_t)
 8. [unroll loops](#8-unroll-loops)
+9. [переопределение аллокатора](#9-переопределение-аллокатора)
 
 ### 1. прагмочки
 Тут я лично юзаю ```#pragma GCC optimize("O3,unroll-loops")``` и ```#pragma GCC target("avx2")```.
@@ -219,3 +220,51 @@ for (int z = 0; z < 5; z++) {
 |Ручками|Без прагмы|С прагмой|
 |-------|----------|---------|
 |537ms  |616ms     |558ms    |
+
+### 9. переопределение аллокатора
+можно переопределить new и delete, чтобы ускорить вашу программу. Однако стоит помнить, что данный мув памяти будет есть немало. Подробнее [здесь](https://algorithmica.org/ru/no-deallocation)
+
+Вот читерский шаблон:
+```
+const int MAX_MEM = 4e8;
+int mpos = 0;
+alignas(long long) char mem[MAX_MEM];
+inline void * operator new(size_t n) {
+    if (n & 7) n += 8 - (n & 7);
+    char *res = mem + mpos;
+    mpos += n;
+    return (void *)res;
+}
+void operator delete(void *) {}
+```
+
+Глянем на этот пример:
+```
+#include <bits/stdc++.h>
+using namespace std;
+
+
+const int MAX_MEM = 4e8;
+int mpos = 0;
+alignas(long long) char mem[MAX_MEM];
+inline void * operator new(size_t n) {
+    if (n & 7) n += 8 - (n & 7);
+    char *res = mem + mpos;
+    mpos += n;
+    return (void *)res;
+}
+void operator delete(void *) {}
+
+const int N = 1e7;
+
+int32_t main() {
+    unordered_map<int, int> mp;
+    for (int i = 0; i < N; i++)
+        mp[i] = i / 2;
+    cout << mp[0];
+}
+```
+
+|без переопределения|с ним|
+|-------------------|-----|
+|2.10s              |1.66s|
