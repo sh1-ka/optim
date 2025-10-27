@@ -281,7 +281,9 @@ int32_t main() {
 Работает быстрее сета, поэтому супер хайп.
 
 по умолчанию оно работает на макс, чтобы перевести на минимум:
-`priority_queue <int, vector<int>, greater<int>> pq;` 
+`priority_queue <int, vector<int>, greater<int>> pq;`  
+
+Например так можно ускорить алгоритм дейкстра: https://ru.algorithmica.org/cs/shortest-paths/dijkstra/#%d1%81-%d0%ba%d1%83%d1%87%d0%b5%d0%b9
 
 ### 11. модульная арифметика
 
