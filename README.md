@@ -167,6 +167,19 @@ int32_t main() {
 ТЛ: https://codeforces.com/contest/1822/submission/311452284  
 ОК: https://codeforces.com/contest/1822/submission/311452644  
 
+#### 4.3 свой хеш для юмапы
+```
+struct pair_hash {
+    inline size_t operator()(const pair<int, int>& v) const {
+        return v.first * INF + v.second;
+    }
+};
+
+unordered_set <pll, pair_hash> banned;
+```
+
+вот таким образом можете бахнуть свой хеш.
+
 ### 5. умножение/деление/взятие по модулю на 2
 умножить на 2: << 1  
 поделить на 2: >> 1  
