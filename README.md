@@ -23,7 +23,7 @@
 За подробностями [сюда](https://codeforces.com/blog/entry/129283).
 Для примера возьмем такой код:
 
-```
+```cpp
 #include <bits/stdc++.h>
 #pragma GCC optimize("O3,unroll-loops")
 #pragma GCC target("avx2")
@@ -50,7 +50,7 @@ int32_t main() {
 
 Для примера глянем на этот код:
 
-```
+```cpp
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -75,7 +75,7 @@ int32_t main() {
 ### 3. стат массивы
 Стат массивы работают быстрее векторов. И местами это может зарешать. Еще если вектор используется как стек, то можно использовать статмассив с индексом его конца.
 
-```
+```cpp
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -101,13 +101,13 @@ int32_t main() {
 #### 4.1 чо можно юзать
 Если мапа долго работает, то можно свапнуть на юмапу. Также ускорить работу юмапы можно с помощью ```mp.reserve(MAX_N)```.
 Еще не стоит забывать про существование gp_hash_table. Подключить его можно так:
-```
+```cpp
 #include <ext/pb_ds/assoc_container.hpp>
 using namespace __gnu_pbds;
 ```
 
 Стоит помнить, что можно сжимать числа, порой это может быть хорошим вариантом. Запихиваете все числа в вектор, а потом пишите:
-```
+```cpp
 a.sort(a.begin(), a.end()); // сортим вектор
 a.erase(unique(a.begin(), a.end()), a.end()); // удаляем повторки
 ```
@@ -115,7 +115,7 @@ a.erase(unique(a.begin(), a.end()), a.end()); // удаляем повторки
 чтобы получить индекс в отсортированом массиве можно написать: ```lower_bound(a.begin(), a.end(), x) - a.begin()```
 
 
-```
+```cpp
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -142,7 +142,7 @@ int32_t main() {
 
 #### 4.2 если надо проверить на наличие ключа
 
-```
+```cpp
 int32_t main() {
     map<int, int> mp;
     for (int i = 0; i < 2 * N; i += 2)
@@ -168,7 +168,7 @@ int32_t main() {
 ОК: https://codeforces.com/contest/1822/submission/311452644  
 
 #### 4.3 свой хеш для юмапы
-```
+```cpp
 struct pair_hash {
     inline size_t operator()(const pair<int, int>& v) const {
         return v.first * INF + v.second;
@@ -187,7 +187,7 @@ unordered_set <pll, pair_hash> banned;
 
 > оказалось, что первые 2 не сильно отличались, а вот модуль ускорял
 
-```
+```cpp
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -208,7 +208,7 @@ int32_t main() {
 ### 6. порядок перебора
 Если в матрице сначала перебирать строки потом столбцы, то это будет быстрее, чем сначала столбцы, а потом строки.
 
-```
+```cpp
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -238,7 +238,7 @@ int32_t main() {
 
 Например вот это у меня Окнулось
 
-```
+```cpp
 int fi = (a[i][0] < a[j][0]) + 
             (a[i][1] < a[j][1]) +
                 (a[i][2] < a[j][2]) + 
@@ -248,7 +248,7 @@ int fi = (a[i][0] < a[j][0]) +
 
 А это словило ТЛ10
 
-```
+```cpp
 int fi = 0;
 for (int z = 0; z < 5; z++) {
     fi += (a[i][z] < a[j][z]);
@@ -256,7 +256,7 @@ for (int z = 0; z < 5; z++) {
 ```
 
 Также есть хайповая прагма `#pragma GCC unroll 4`
-```
+```cpp
 int fi = 0;
 #pragma GCC unroll 4
 for (int z = 0; z < 5; z++) {
@@ -274,7 +274,7 @@ for (int z = 0; z < 5; z++) {
 можно переопределить new и delete, чтобы ускорить вашу программу. Однако стоит помнить, что данный мув памяти будет есть немало. Подробнее [здесь](https://algorithmica.org/ru/no-deallocation)
 
 Вот читерский шаблон:
-```
+```cpp
 const int MAX_MEM = 4e8;
 int mpos = 0;
 alignas(long long) char mem[MAX_MEM];
@@ -288,7 +288,7 @@ void operator delete(void *) {}
 ```
 
 Глянем на этот пример:
-```
+```cpp
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -329,13 +329,13 @@ int32_t main() {
 ### 11. модульная арифметика
 
 #### 11.1 сумма, тут есть 2 варианта
-```
+```cpp
 int sum(int a, int b) { return (a + b) % M; }
 ```
 
 И если вы точно знаете, что a и b всегда будут меньше M, то:
 
-```
+```cpp
 int sum(int a, int b) { a += b; return a - (a >= M) * M; }
 ```
 
@@ -343,13 +343,13 @@ int sum(int a, int b) { a += b; return a - (a >= M) * M; }
 
 #### 11.2 разность, тут тоже есть 2 варианта
 Так как плюсы для отрицательных чисел просто берет по модулю и добавляет минус, то для правильного взятия по модулю надо к результату прибавить M и еще раз взять по модулю M.
-```
+```cpp
 int dif(int a, int b) { return ((a - b) % M + M) % M; }
 ```
 
 И если вы точно знаете, что a и b всегда будут меньше M, то:
 
-```
+```cpp
 int dif(int a, int b) { a -= b; return a + (a < 0) * M; }
 ```
 
@@ -360,7 +360,7 @@ int dif(int a, int b) { a -= b; return a + (a < 0) * M; }
 У вас результат умножения может не поместиться в инты и тут есть 2 варианта.  
 1 вариант: просто все считайте в лонгах
 2 вариант:
-```
+```cpp
 int mul(int a, int b) { return 1ll * a * b % M; }
 ```
 ну тут умножение в лонгах и далее кастуем инт.
@@ -387,7 +387,7 @@ int mul(int a, int b) { return 1ll * a * b % M; }
 Если у вас не заходит до сверху пишите снизу, вот тут почитайте подробнее https://peltorator.org/posts/down_segment_tree/  
 Как я пишу(изменение в точке, максимум на отрезке):
 
-```
+```cpp
 int t[2 * N];
 
 void upd(int id, int x) {
